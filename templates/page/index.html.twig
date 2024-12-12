@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1 class="text-center mb-4">Nos Recettes</h1>
+    <div class="row">
+        {% for recette in recettes %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100 d-flex flex-column">
+                    <img src="{{ recette.image }}" class="card-img-top h-50" alt="{{ recette.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recette.title }}</h5>
+                        <p class="card-text">{{ recette.description }}</p>
+                        <a href="{{ path('recette_show', { 'id': recette.id }) }}" class="btn btn-primary">Voir la recette</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
