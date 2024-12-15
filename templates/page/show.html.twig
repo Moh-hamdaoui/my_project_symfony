@@ -21,4 +21,17 @@
             <a href="{{ path('recette_index') }}" class="btn btn-secondary mt-3">Retour à la liste des recettes</a>
         </div>
     </div>
+    <h3>Commentaires</h3>
+    <ul>
+        {% for comment in recette.comments %}
+            <li>
+                <strong>{{ comment.user.email }}</strong> : {{ comment.text }}
+            </li>
+        {% else %}
+            <li>Aucun commentaire pour cette recette.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('recette_comment', { id: recette.id }) }}" class="btn btn-secondary">Ajouter un commentaire</a>
+
 {% endblock %}

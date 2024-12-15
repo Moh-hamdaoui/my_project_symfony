@@ -1,10 +1,6 @@
 <?php
+namespace App\Entity; 
 
-namespace App\Entity;
-
-use App\Repository\CommentRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,24 +12,16 @@ class Comment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: false)]
     private ?string $text = null;
 
-    #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\ManyToOne(targetEntity: Recette::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Recette $recette = null;
 
-    /**
-     * @var Collection<int, user>
-     */
-    #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\ManyToOne(targetEntity: user::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
-    public function __construct()
-    {
-        $this->OneToMany = new ArrayCollection();
-    }
+    private ?user $user = null;
 
     public function getId(): ?int
     {
@@ -45,16 +33,9 @@ class Comment
         return $this->text;
     }
 
-    public function setText(?string $text): static
+    public function setText(string $text): static
     {
         $this->text = $text;
-
-        return $this;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
 
         return $this;
     }
@@ -71,32 +52,14 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return Collection<int, user>
-     */
-    public function getOneToMany(): Collection
+    public function getUser(): ?user
     {
-        return $this->OneToMany;
+        return $this->user;
     }
 
-    public function addOneToMany(user $oneToMany): static
+    public function setUser(?user $user): static
     {
-        if (!$this->OneToMany->contains($oneToMany)) {
-            $this->OneToMany->add($oneToMany);
-            $oneToMany->setComment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOneToMany(user $oneToMany): static
-    {
-        if ($this->OneToMany->removeElement($oneToMany)) {
-            // set the owning side to null (unless already changed)
-            if ($oneToMany->getComment() === $this) {
-                $oneToMany->setComment(null);
-            }
-        }
+        $this->user = $user;
 
         return $this;
     }

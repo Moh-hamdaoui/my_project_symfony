@@ -46,13 +46,13 @@ class SecurityController extends AbstractController
     #[Route(path: '/register', name: 'app_register')]
     public function register(Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $user = new User();
+        $user = new user();
 
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérifiez si l'email est déjà utilisé
+
             if ($userRepository->findOneBy(['email' => $user->getEmail()])) {
                 $this->addFlash('error', 'Cet email est déjà utilisé.');
                 return $this->redirectToRoute('app_register');
@@ -60,15 +60,12 @@ class SecurityController extends AbstractController
 
             $user->setRoles(['ROLE_USER']);
 
-            // Hachage du mot de passe
             $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($hashedPassword);
 
-            // Enregistrez l'utilisateur
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // Redirection vers la page de connexion
             return $this->redirectToRoute('app_login');
         }
 

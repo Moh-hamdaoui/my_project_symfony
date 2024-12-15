@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
+use App\Entity\user;
 use App\Entity\Recette;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -68,7 +68,6 @@ class AppFixtures extends Fixture
             ]
         ];
 
-        // Ajouter chaque recette à la base de données
         foreach ($recettesData as $data) {
             $recette = new Recette();
             $recette->setTitle($data['title'])
@@ -81,8 +80,7 @@ class AppFixtures extends Fixture
             $manager->persist($recette);
         }
 
-         // Ajouter un utilisateur
-        $user = new User();
+        $user = new user();
         $user->setEmail('user@example.com');
         $user->setRoles(['ROLE_USER']); 
  
